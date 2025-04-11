@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-login-service
+  template:
+    metadata:
+      labels:
+        app: user-login-service
+    spec:
+      containers:
+      - name: user-login-service
+        image: srbhk/user-login-service:latest # Your image
+        ports:
+        - containerPort: 9000
+        env: # Override application.properties
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres-service:5432/user_auth_db
+        - name: SPRING_DATASOURCE_USERNAME
+          value: tts
+          # Or from secret:
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: postgres-secret
+          #     key: POSTGRES_USER
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value: http://eureka-service:8761/eureka/
+        - name: SERVER_PORT
+          value: "9000"

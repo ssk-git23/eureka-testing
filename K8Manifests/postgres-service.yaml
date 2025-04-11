@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service # Internal DNS name
+spec:
+  selector:
+    app: postgres # Selects pods from the deployment
+  ports:
+  - protocol: TCP
+    port: 5432 # Service port
+    targetPort: 5432 # Container port
+  type: ClusterIP # Only accessible within the cluster

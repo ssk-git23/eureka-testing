@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-service # Internal DNS name for other services
+spec:
+  selector:
+    app: eureka-server
+  ports:
+  - protocol: TCP
+    port: 8761       # Service port
+    targetPort: 8761 # Container port
+  # Use NodePort only if you need external access to Eureka dashboard directly
+  # type: NodePort
+  type: ClusterIP # Usually sufficient for internal discovery

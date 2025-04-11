@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: login-service
+spec:
+  selector:
+    app: user-login-service
+  ports:
+  - protocol: TCP
+    port: 8080       # Service port
+    targetPort: 8080 # Container port
+    nodePort: 30000 # Example static NodePort
+  type: NodePort # Expose externally via node IP:nodePort

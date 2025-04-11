@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:17 # Use the correct version you need
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: user_auth_db # Your database name
+        - name: POSTGRES_USER
+          value: tts # Your database username
+          # Or reference from secret if needed:
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: postgres-secret
+          #     key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        # --- NO volumeMounts section here ---
+      # --- NO volumes section here ---

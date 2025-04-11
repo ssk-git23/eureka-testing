@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registration-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-registration-service
+  template:
+    metadata:
+      labels:
+        app: user-registration-service
+    spec:
+      containers:
+      - name: user-registration-service
+        image: srbhk/user-registration-service:latest # Your image
+        ports:
+        - containerPort: 8081
+        env: # Override application.properties with K8s service names/secrets
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres-service:5432/user_auth_db # Connect via K8s service
+        - name: SPRING_DATASOURCE_USERNAME
+          value: tts # DB Username
+          # Or from secret:
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: postgres-secret
+          #     key: POSTGRES_USER
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD # Get password from secret
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value: http://eureka-service:8761/eureka/ # Connect to Eureka via K8s service
+        - name: SERVER_PORT # Ensure K8s knows the port
+          value: "8081"
+        # Add readiness/liveness probes
