@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .error { color: red; }
+        .success { color: green; }
+        label { display: block; margin-bottom: 5px; }
+        input[type=text], input[type=password] { margin-bottom: 15px; padding: 8px; width: 250px; }
+        button { padding: 10px 15px; }
+    </style>
+</head>
+<body>
+    <h1>Register New User</h1>
+
+    <!-- Display Success Message -->
+    <div th:if="${successMessage}" class="success" th:text="${successMessage}"></div>
+
+    <!-- Display Error Message -->
+    <div th:if="${errorMessage}" class="error" th:text="${errorMessage}"></div>
+
+    <form th:action="@{/register}" th:object="${user}" method="post">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" th:field="*{username}" required />
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" th:field="*{password}" required />
+        </div>
+        <div>
+            <button type="submit">Register</button>
+        </div>
+    </form>
+    <hr>
+    <p>Already have an account? <a href="http://localhost:8080/login">Login here</a></p> <!-- Link to Login Service -->
+
+</body>
+</html>

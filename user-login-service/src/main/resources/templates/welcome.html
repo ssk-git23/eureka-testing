@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <!-- Add security namespace -->
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+     <style>
+         body { font-family: sans-serif; padding: 20px; }
+         form { display: inline; } /* Keep logout button on same line */
+         button { padding: 5px 10px; background-color: #f0f0f0; border: 1px solid #ccc; cursor: pointer;}
+    </style>
+</head>
+<body>
+    <!-- Display welcome message using the username passed from controller -->
+    <h1 th:text="'Hello ' + ${username} + '!'">Hello User!</h1>
+
+    <p>Welcome to the application.</p>
+
+    <!-- Logout Form -->
+    <form th:action="@{/logout}" method="post">
+         <!-- CSRF token needed for POST logout -->
+        <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+        <button type="submit">Logout</button>
+    </form>
+
+    <!-- Alternative way to get username directly in Thymeleaf using Spring Security Extras -->
+    <!-- <p>Logged in as: <span sec:authentication="name">Username</span></p> -->
+
+</body>
+</html>
